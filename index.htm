@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presensi Fisika - SMA Negeri 14 Depok</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        physics: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                            dark: '#0f172a',
+                            accent: '#06b6d4',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .card-box {
+                box-shadow: none !important;
+                border: 1px solid #ccc !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- Header / Navbar -->
+    <header class="bg-gradient-to-r from-physics-900 via-physics-800 to-slate-900 text-white shadow-lg sticky top-0 z-30 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-physics-accent/20 border border-physics-accent/40 flex items-center justify-center text-physics-accent text-xl">
+                    <i class="fa-solid fa-atom animate-spin-slow"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-bold tracking-tight flex items-center gap-2">
+                        Presensi Fisika
+                        <span class="text-xs bg-physics-accent/20 text-physics-accent px-2.5 py-0.5 rounded-full border border-physics-accent/30 font-medium">SMA Negeri 14 Depok</span>
+                    </h1>
+                    <p class="text-xs text-slate-300">Sistem Kehadiran & Verifikasi Seragam Digital</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span id="currentTime" class="text-xs sm:text-sm font-medium bg-slate-800/60 px-3 py-1.5 rounded-lg border border-slate-700 hidden sm:inline-block">
+                    <i class="fa-regular fa-clock text-physics-accent mr-1.5"></i> --:--:--
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+        <!-- Banner Info Singkat -->
+        <div class="bg-gradient-to-r from-physics-600 to-physics-800 rounded-2xl p-6 text-white shadow-md relative overflow-hidden no-print">
+            <div class="absolute right-0 top-0 translate-x-4 -translate-y-4 opacity-10 pointer-events-none">
+                <i class="fa-solid fa-square-root-variable text-[180px]"></i>
+            </div>
+            <div class="relative z-10 max-w-2xl">
+                <h2 class="text-xl sm:text-2xl font-bold mb-1">Portal Presensi Fisika SMA Negeri 14 Depok</h2>
+                <p class="text-physics-100 text-sm">Silakan isi daftar hadir dan upload/ambil foto verifikasi dengan seragam sekolah sesuai jadwal kelas.</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+        <!-- Banner Info Singkat -->
+        <div class="bg-gradient-to-r from-physics-600 to-physics-800 rounded-2xl p-6 text-white shadow-md relative overflow-hidden no-print">
+            <div class="absolute right-0 top-0 translate-x-4 -translate-y-4 opacity-10 pointer-events-none">
+                <i class="fa-solid fa-square-root-variable text-[180px]"></i>
+            </div>
+            <div class="relative z-10 max-w-2xl">
+                <h2 class="text-xl sm:text-2xl font-bold mb-1">Selamat Datang di Portal Presensi Fisika</h2>
+                <p class="text-physics-100 text-sm">Pastikan untuk mengambil foto bukti menggunakan seragam sekolah lengkap saat melakukan verifikasi kehadiran.</p>
+            </div>
+        </div>
+
+        <!-- Quick Stats Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 no-print">
+            <!-- Hadir -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl shrink-0">
+                    <i class="fa-solid fa-user-check"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 uppercase font-semibold tracking-wider">Hadir Hari Ini</p>
+                    <h3 id="statHadir" class="text-2xl font-bold text-slate-800">0</h3>
+                </div>
+            </div>
+            <!-- Izin -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center text-xl shrink-0">
+                    <i class="fa-solid fa-envelope-open-text"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 uppercase font-semibold tracking-wider">Izin</p>
+                    <h3 id="statIzin" class="text-2xl font-bold text-slate-800">0</h3>
+                </div>
+            </div>
+            <!-- Sakit -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-xl shrink-0">
+                    <i class="fa-solid fa-notes-medical"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 uppercase font-semibold tracking-wider">Sakit</p>
+                    <h3 id="statSakit" class="text-2xl font-bold text-slate-800">0</h3>
+                </div>
+            </div>
+            <!-- Alpa -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-xl shrink-0">
+                    <i class="fa-solid fa-user-xmark"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 uppercase font-semibold tracking-wider">Alpa</p>
+                    <h3 id="statAlpa" class="text-2xl font-bold text-slate-800">0</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Layout Form & Tabel Rekap -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+            <!-- FORM INPUT (4 cols di desktop) -->
+            <div class="lg:col-span-4 no-print">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden sticky top-20">
+                    <div class="bg-slate-900 text-white px-5 py-4 flex justify-between items-center">
+                        <h2 class="font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-pen-to-square text-physics-accent"></i>
+                            <span id="formTitle">Form Input Presensi</span>
+                        </h2>
+                        <button id="cancelEditBtn" onclick="resetForm()" class="hidden text-xs bg-slate-700 hover:bg-slate-600 text-white px-2 py-1 rounded">
+                            Batal Edit
+                        </button>
+                    </div>
+
+                    <form id="presensiForm" onsubmit="handleFormSubmit(event)" class="p-5 space-y-4">
+                        <input type="hidden" id="editId" value="">
+
+                        <!-- Nama Siswa -->
+                        <div>
+                            <label for="nama" class="block text-xs font-semibold text-slate-700 uppercase mb-1">Nama Lengkap Siswa <span class="text-rose-500">*</span></label>
+                            <input type="text" id="nama" required placeholder="Masukkan nama lengkap..." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-physics-500 transition">
+                        </div>
+
+                        <!-- Kelas & Tanggal Grid -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <!-- Kelas -->
+                            <div>
+                                <label for="kelas" class="block text-xs font-semibold text-slate-700 uppercase mb-1">Kelas <span class="text-rose-500">*</span></label>
+                                <select id="kelas" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-physics-500 bg-white transition">
+                                    <option value="" disabled selected>Pilih Kelas</option>
+                                    <option value="X 1">X 1</option>
+                                    <option value="X 2">X 2</option>
+                                    <option value="X 3">X 3</option>
+                                    <option value="X 4">X 4</option>
+                                </select>
+                            </div>
+                            <!-- Tanggal -->
+                            <div>
+                                <label for="tanggal" class="block text-xs font-semibold text-slate-700 uppercase mb-1">Tanggal <span class="text-rose-500">*</span></label>
+                                <input type="date" id="tanggal" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-physics-500 bg-white transition">
+                            </div>
+                        </div>
+
+                        <!-- Status Kehadiran -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 uppercase mb-2">Status Kehadiran <span class="text-rose-500">*</span></label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <label class="cursor-pointer border border-slate-200 rounded-lg p-2.5 flex items-center space-x-2 hover:bg-slate-50 transition has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50/50">
+                                    <input type="radio" name="status" value="Hadir" checked class="text-emerald-600 focus:ring-emerald-500" onchange="togglePhotoRequirement()">
+                                    <span class="text-xs font-medium text-slate-700">Hadir</span>
+                                </label>
+                                <label class="cursor-pointer border border-slate-200 rounded-lg p-2.5 flex items-center space-x-2 hover:bg-slate-50 transition has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50/50">
+                                    <input type="radio" name="status" value="Izin" class="text-amber-600 focus:ring-amber-500" onchange="togglePhotoRequirement()">
+                                    <span class="text-xs font-medium text-slate-700">Izin</span>
+                                </label>
+                                <label class="cursor-pointer border border-slate-200 rounded-lg p-2.5 flex items-center space-x-2 hover:bg-slate-50 transition has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50/50">
+                                    <input type="radio" name="status" value="Sakit" class="text-blue-600 focus:ring-blue-500" onchange="togglePhotoRequirement()">
+                                    <span class="text-xs font-medium text-slate-700">Sakit</span>
+                                </label>
+                                <label class="cursor-pointer border border-slate-200 rounded-lg p-2.5 flex items-center space-x-2 hover:bg-slate-50 transition has-[:checked]:border-rose-500 has-[:checked]:bg-rose-50/50">
+                                    <input type="radio" name="status" value="Alpa" class="text-rose-600 focus:ring-rose-500" onchange="togglePhotoRequirement()">
+                                    <span class="text-xs font-medium text-slate-700">Alpa</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Upload / Capture Foto -->
+                        <div id="photoSection">
+                            <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">
+                                Foto Seragam Sekolah <span id="photoRequiredStar" class="text-rose-500">*</span>
+                            </label>
+                            
+                            <!-- Tab Options: Webcam vs Upload -->
+                            <div class="flex border-b border-slate-200 mb-2">
+                                <button type="button" id="tabUpload" onclick="switchPhotoTab('upload')" class="py-1.5 px-3 border-b-2 border-physics-500 text-physics-600 text-xs font-medium">
+                                    <i class="fa-solid fa-upload mr-1"></i> Upload File
+                                </button>
+                                <button type="button" id="tabCamera" onclick="switchPhotoTab('camera')" class="py-1.5 px-3 border-b-2 border-transparent text-slate-500 hover:text-slate-700 text-xs font-medium">
+                                    <i class="fa-solid fa-camera mr-1"></i> Ambil Kamera
+                                </button>
+                            </div>
+
+                            <!-- Area Input Upload File -->
+                            <div id="areaUpload" class="block">
+                                <div class="border-2 border-dashed border-slate-300 rounded-xl p-4 text-center hover:bg-slate-50 cursor-pointer relative transition">
+                                    <input type="file" id="fotoInput" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" onchange="previewUploadedImage(this)">
+                                    <i class="fa-solid fa-cloud-arrow-up text-2xl text-slate-400 mb-1"></i>
+                                    <p class="text-xs text-slate-600 font-medium">Klik untuk upload foto seragam</p>
+                                    <p class="text-[10px] text-slate-400 mt-1">PNG, JPG atau WEBP (Maks 2MB)</p>
+                                </div>
+                            </div>
+
+                            <!-- Area Webcam -->
+                            <div id="areaCamera" class="hidden space-y-2">
+                                <div class="relative bg-slate-900 rounded-xl overflow-hidden aspect-video flex items-center justify-center">
+                                    <video id="webcamVideo" autoplay playsinline class="w-full h-full object-cover hidden"></video>
+                                    <canvas id="webcamCanvas" class="hidden"></canvas>
+                                    <div id="webcamPlaceholder" class="text-center p-4">
+                                        <i class="fa-solid fa-camera-retro text-3xl text-slate-600 mb-2"></i>
+                                        <p class="text-xs text-slate-400">Kamera belum aktif</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button type="button" id="startCamBtn" onclick="startWebcam()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-white py-1.5 rounded-lg text-xs font-medium flex items-center justify-center gap-1.5">
+                                        <i class="fa-solid fa-power-off text-emerald-400"></i> Buka Kamera
+                                    </button>
+                                    <button type="button" id="captureCamBtn" onclick="captureWebcam()" disabled class="flex-1 bg-physics-600 hover:bg-physics-700 disabled:bg-slate-300 text-white py-1.5 rounded-lg text-xs font-medium flex items-center justify-center gap-1.5">
+                                        <i class="fa-solid fa-circle-dot"></i> Ambil Foto
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Preview Foto Terpilih -->
+                            <div id="previewContainer" class="hidden mt-3 relative">
+                                <p class="text-[11px] text-slate-500 font-medium mb-1">Preview Foto:</p>
+                                <div class="relative w-full h-40 bg-slate-100 rounded-xl overflow-hidden border border-slate-200">
+                                    <img id="fotoPreview" src="" alt="Preview Seragam" class="w-full h-full object-cover">
+                                    <button type="button" onclick="removePhoto()" class="absolute top-2 right-2 bg-rose-500 hover:bg-rose-600 text-white w-6 h-6 rounded-full flex items-center justify-center shadow">
+                                        <i class="fa-solid fa-xmark text-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" id="submitBtn" class="w-full bg-physics-600 hover:bg-physics-700 text-white font-semibold py-2.5 rounded-xl text-sm shadow-md transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span>Simpan Presensi</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- REKAPITULASI TABEL (8 cols di desktop) -->
+            <div class="lg:col-span-8 space-y-4">
+                
+                <!-- Filter & Action Tools -->
+                <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 space-y-3 no-print">
+                    <div class="flex flex-col sm:flex-row gap-3 justify-between items-stretch sm:items-center">
+                        
+                        <!-- Search Bar -->
+                        <div class="relative flex-1">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                            <input type="text" id="searchInput" oninput="renderTable()" placeholder="Cari nama siswa..." class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-physics-500">
+                        </div>
+
+                        <!-- Actions (Export/Print) -->
+                        <div class="flex items-center gap-2">
+                            <button onclick="exportToCSV()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-3 py-2 rounded-xl text-xs font-medium flex items-center gap-1.5 transition">
+                                <i class="fa-solid fa-file-excel text-emerald-600"></i> Excel/CSV
+                            </button>
+                            <button onclick="window.print()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 px-3 py-2 rounded-xl text-xs font-medium flex items-center gap-1.5 transition">
+                                <i class="fa-solid fa-print"></i> Cetak PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Filter Options Grid -->
+                    <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-slate-100">
+                        <span class="text-xs font-semibold text-slate-500 flex items-center gap-1">
+                            <i class="fa-solid fa-filter"></i> Filter:
+                        </span>
+                        
+                        <!-- Filter Kelas -->
+                        <select id="filterKelas" onchange="renderTable()" class="px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-slate-50 focus:outline-none focus:ring-2 focus:ring-physics-500">
+                            <option value="Semua">Semua Kelas</option>
+                            <option value="X 1">Kelas X 1</option>
+                            <option value="X 2">Kelas X 2</option>
+                            <option value="X 3">Kelas X 3</option>
+                            <option value="X 4">Kelas X 4</option>
+                        </select>
+
+                        <!-- Filter Status -->
+                        <select id="filterStatus" onchange="renderTable()" class="px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-slate-50 focus:outline-none focus:ring-2 focus:ring-physics-500">
+                            <option value="Semua">Semua Status</option>
+                            <option value="Hadir">Hadir</option>
+                            <option value="Izin">Izin</option>
+                            <option value="Sakit">Sakit</option>
+                            <option value="Alpa">Alpa</option>
+                        </select>
+
+                        <button onclick="resetFilters()" class="text-xs text-physics-600 hover:text-physics-800 underline ml-auto">
+                            Reset Filter
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Printable Document Header (Hanya muncul saat print) -->
+                <div class="hidden print-only mb-6 text-center border-b-2 border-slate-800 pb-4">
+                    <h1 class="text-2xl font-extrabold uppercase tracking-wider text-slate-900">SMA NEGERI 14 DEPOK</h1>
+                    <h2 class="text-lg font-bold uppercase tracking-wide text-slate-700">LAPORAN REKAPITULASI PRESENSI MATA PELAJARAN FISIKA</h2>
+                    <p class="text-xs text-slate-500 mt-1">Sistem Informasi Presensi & Seragam Digital Siswa</p>
+                    <p id="printDate" class="text-xs font-semibold text-slate-600 mt-1"></p>
+                </div>
+
+                <!-- Tabel Card Container -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
+                    <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center">
+                        <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-physics-600"></i>
+                            Daftar Kehadiran Siswa
+                        </h3>
+                        <span id="totalRecords" class="text-xs font-medium text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full">0 Data</span>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-600 uppercase font-semibold border-b border-slate-200">
+                                    <th class="py-3 px-4 w-12 text-center">No</th>
+                                    <th class="py-3 px-4">Tanggal</th>
+                                    <th class="py-3 px-4">Nama Siswa</th>
+                                    <th class="py-3 px-4">Kelas</th>
+                                    <th class="py-3 px-4">Status</th>
+                                    <th class="py-3 px-4 text-center">Foto Seragam</th>
+                                    <th class="py-3 px-4 text-center no-print">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="presensiTableBody" class="divide-y divide-slate-100">
+                                <!-- Dynamic Content loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="emptyState" class="hidden py-12 text-center">
+                        <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fa-regular fa-folder-open text-2xl"></i>
+                        </div>
+                        <p class="text-sm font-semibold text-slate-700">Tidak ada data presensi ditemukan</p>
+                        <p class="text-xs text-slate-400 mt-1">Coba sesuaikan filter atau tambahkan data presensi baru.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Custom Modal / Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 ease-in-out pointer-events-none">
+        <div id="toastContent" class="bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 border border-slate-700">
+            <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400"></i>
+            <span id="toastMessage" class="text-xs font-medium">Notifikasi</span>
+        </div>
+    </div>
+
+    <!-- Modal Lightbox Foto -->
+    <div id="photoModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" onclick="closePhotoModal()">
+        <div class="bg-white rounded-2xl overflow-hidden max-w-lg w-full shadow-2xl transform transition-all" onclick="event.stopPropagation()">
+            <div class="p-4 bg-slate-900 text-white flex justify-between items-center">
+                <h4 id="modalStudentName" class="font-semibold text-sm">Bukti Seragam Siswa</h4>
+                <button onclick="closePhotoModal()" class="text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="p-2 bg-slate-950 flex items-center justify-center">
+                <img id="modalImage" src="" alt="Foto Seragam Full" class="max-h-[70vh] object-contain rounded">
+            </div>
+            <div class="p-3 bg-slate-50 border-t flex justify-end">
+                <button onclick="closePhotoModal()" class="px-4 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-lg text-xs font-medium">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-auto py-4 text-center text-xs text-slate-500 no-print">
+        <p>&copy; 2026 Presensi Mata Pelajaran Fisika &bull; SMA Negeri 14 Depok</p>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Storage Key
+        const STORAGE_KEY = 'PRESENSI_FISIKA_DATA';
+
+        // State Data
+        let presensiList = [];
+        let webcamStream = null;
+        let currentPhotoBase64 = '';
+
+        // Initial Sample Data
+        const sampleData = [
+            {
+                id: '1',
+                nama: 'Aditya Pratama',
+                kelas: 'X 1',
+                tanggal: '2026-10-27',
+                status: 'Hadir',
+                foto: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&auto=format&fit=crop&q=80'
+            },
+            {
+                id: '2',
+                nama: 'Siti Nurhaliza',
+                kelas: 'X 2',
+                tanggal: '2026-10-27',
+                status: 'Hadir',
+                foto: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200&auto=format&fit=crop&q=80'
+            },
+            {
+                id: '3',
+                nama: 'Budi Santoso',
+                kelas: 'X 1',
+                tanggal: '2026-10-27',
+                status: 'Izin',
+                foto: ''
+            },
+            {
+                id: '4',
+                nama: 'Dewi Lestari',
+                kelas: 'X 3',
+                tanggal: '2026-10-27',
+                status: 'Sakit',
+                foto: ''
+            },
+            {
+                id: '5',
+                nama: 'Rizky Ramadhan',
+                kelas: 'X 4',
+                tanggal: '2026-10-27',
+                status: 'Alpa',
+                foto: ''
+            }
+        ];
+
+        // Initialize App
+        window.onload = function() {
+            // Set Default Tanggal Hari Ini
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('tanggal').value = today;
+            document.getElementById('printDate').innerText = 'Tanggal Cetak: ' + new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+            // Update Realtime Clock
+            setInterval(updateClock, 1000);
+            updateClock();
+
+            // Load Data
+            loadData();
+            togglePhotoRequirement();
+        };
+
+        // Realtime Clock Function
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('id-ID');
+            const dateString = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+            document.getElementById('currentTime').innerHTML = `<i class="fa-regular fa-clock text-physics-accent mr-1.5"></i> ${dateString} - ${timeString}`;
+        }
+
+        // Load Data from LocalStorage
+        function loadData() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                try {
+                    presensiList = JSON.parse(stored);
+                } catch (e) {
+                    presensiList = sampleData;
+                }
+            } else {
+                presensiList = sampleData;
+                saveData();
+            }
+            renderTable();
+        }
+
+        // Save Data to LocalStorage
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(presensiList));
+        }
+
+        // Render Table & Summary Cards
+        function renderTable() {
+            const tbody = document.getElementById('presensiTableBody');
+            const searchKeyword = document.getElementById('searchInput').value.toLowerCase();
+            const filterKelas = document.getElementById('filterKelas').value;
+            const filterStatus = document.getElementById('filterStatus').value;
+            const emptyState = document.getElementById('emptyState');
+
+            tbody.innerHTML = '';
+
+            // Filter logic
+            const filtered = presensiList.filter(item => {
+                const matchNama = item.nama.toLowerCase().includes(searchKeyword);
+                const matchKelas = (filterKelas === 'Semua') || (item.kelas === filterKelas);
+                const matchStatus = (filterStatus === 'Semua') || (item.status === filterStatus);
+                return matchNama && matchKelas && matchStatus;
+            });
+
+            // Update Total Counter
+            document.getElementById('totalRecords').innerText = `${filtered.length} Data`;
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                
+                filtered.forEach((item, index) => {
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
+
+                    // Badge color logic
+                    let badgeClass = 'bg-slate-100 text-slate-700 border-slate-200';
+                    if (item.status === 'Hadir') badgeClass = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+                    else if (item.status === 'Izin') badgeClass = 'bg-amber-50 text-amber-700 border-amber-200';
+                    else if (item.status === 'Sakit') badgeClass = 'bg-blue-50 text-blue-700 border-blue-200';
+                    else if (item.status === 'Alpa') badgeClass = 'bg-rose-50 text-rose-700 border-rose-200';
+
+                    // Photo Thumbnail Logic
+                    let photoHTML = `<span class="text-slate-400 italic text-[11px]">Tanpa Foto</span>`;
+                    if (item.foto) {
+                        photoHTML = `
+                            <div class="relative group cursor-pointer inline-block" onclick="openPhotoModal('${item.foto}', '${item.nama}')">
+                                <img src="${item.foto}" alt="Foto" class="w-9 h-9 object-cover rounded-lg border border-slate-300 shadow-sm group-hover:opacity-80 transition">
+                                <div class="absolute inset-0 bg-black/20 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                                    <i class="fa-solid fa-expand text-white text-xs"></i>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    tr.innerHTML = `
+                        <td class="py-3 px-4 text-center font-medium text-slate-500">${index + 1}</td>
+                        <td class="py-3 px-4 font-medium text-slate-700">${formatDate(item.tanggal)}</td>
+                        <td class="py-3 px-4 font-semibold text-slate-900">${escapeHTML(item.nama)}</td>
+                        <td class="py-3 px-4">
+                            <span class="bg-slate-100 text-slate-800 font-semibold px-2 py-0.5 rounded border border-slate-200 text-[11px]">
+                                ${item.kelas}
+                            </span>
+                        </td>
+                        <td class="py-3 px-4">
+                            <span class="px-2.5 py-1 rounded-full border text-[11px] font-semibold inline-flex items-center gap-1.5 ${badgeClass}">
+                                <span class="w-1.5 h-1.5 rounded-full ${item.status === 'Hadir' ? 'bg-emerald-500' : item.status === 'Izin' ? 'bg-amber-500' : item.status === 'Sakit' ? 'bg-blue-500' : 'bg-rose-500'}"></span>
+                                ${item.status}
+                            </span>
+                        </td>
+                        <td class="py-3 px-4 text-center">${photoHTML}</td>
+                        <td class="py-3 px-4 text-center space-x-1 no-print">
+                            <button onclick="editPresensi('${item.id}')" class="p-1.5 bg-slate-100 hover:bg-physics-50 text-slate-600 hover:text-physics-600 rounded-lg transition" title="Edit">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button onclick="deletePresensi('${item.id}')" class="p-1.5 bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 rounded-lg transition" title="Hapus">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            updateSummaryCards();
+        }
+
+        // Update Summary Counter Cards
+        function updateSummaryCards() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayRecords = presensiList.filter(item => item.tanggal === today);
+
+            const hadir = todayRecords.filter(i => i.status === 'Hadir').length;
+            const izin = todayRecords.filter(i => i.status === 'Izin').length;
+            const sakit = todayRecords.filter(i => i.status === 'Sakit').length;
+            const alpa = todayRecords.filter(i => i.status === 'Alpa').length;
+
+            document.getElementById('statHadir').innerText = hadir;
+            document.getElementById('statIzin').innerText = izin;
+            document.getElementById('statSakit').innerText = sakit;
+            document.getElementById('statAlpa').innerText = alpa;
+        }
+
+        // Handle Submit Form (Add or Edit)
+        function handleFormSubmit(event) {
+            event.preventDefault();
+
+            const editId = document.getElementById('editId').value;
+            const nama = document.getElementById('nama').value.trim();
+            const kelas = document.getElementById('kelas').value;
+            const tanggal = document.getElementById('tanggal').value;
+            const status = document.querySelector('input[name="status"]:checked').value;
+
+            if (status === 'Hadir' && !currentPhotoBase64) {
+                showToast('Foto seragam wajib diunggah/diambil jika status Hadir!', 'error');
+                return;
+            }
+
+            if (editId) {
+                // Edit Existing
+                const index = presensiList.findIndex(i => i.id === editId);
+                if (index !== -1) {
+                    presensiList[index] = {
+                        id: editId,
+                        nama,
+                        kelas,
+                        tanggal,
+                        status,
+                        foto: currentPhotoBase64
+                    };
+                    showToast('Data presensi berhasil diperbarui!', 'success');
+                }
+            } else {
+                // Add New Data
+                const newData = {
+                    id: Date.now().toString(),
+                    nama,
+                    kelas,
+                    tanggal,
+                    status,
+                    foto: currentPhotoBase64
+                };
+                presensiList.unshift(newData);
+                showToast('Presensi berhasil disimpan!', 'success');
+            }
+
+            saveData();
+            resetForm();
+            renderTable();
+        }
+
+        // Edit Data
+        function editPresensi(id) {
+            const item = presensiList.find(i => i.id === id);
+            if (!item) return;
+
+            document.getElementById('editId').value = item.id;
+            document.getElementById('nama').value = item.nama;
+            document.getElementById('kelas').value = item.kelas;
+            document.getElementById('tanggal').value = item.tanggal;
+            
+            // Set Status Radio
+            const radios = document.getElementsByName('status');
+            for (const radio of radios) {
+                if (radio.value === item.status) radio.checked = true;
+            }
+
+            // Set Photo Preview
+            if (item.foto) {
+                currentPhotoBase64 = item.foto;
+                document.getElementById('fotoPreview').src = item.foto;
+                document.getElementById('previewContainer').classList.remove('hidden');
+            } else {
+                removePhoto();
+            }
+
+            document.getElementById('formTitle').innerText = 'Edit Presensi';
+            document.getElementById('cancelEditBtn').classList.remove('hidden');
+            document.getElementById('submitBtn').querySelector('span').innerText = 'Update Presensi';
+
+            togglePhotoRequirement();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Delete Data
+        function deletePresensi(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus data presensi ini?')) {
+                presensiList = presensiList.filter(i => i.id !== id);
+                saveData();
+                renderTable();
+                showToast('Data presensi telah dihapus.', 'info');
+            }
+        }
+
+        // Reset Form
+        function resetForm() {
+            document.getElementById('presensiForm').reset();
+            document.getElementById('editId').value = '';
+            document.getElementById('tanggal').value = new Date().toISOString().split('T')[0];
+            
+            removePhoto();
+            stopWebcam();
+
+            document.getElementById('formTitle').innerText = 'Form Input Presensi';
+            document.getElementById('cancelEditBtn').classList.add('hidden');
+            document.getElementById('submitBtn').querySelector('span').innerText = 'Simpan Presensi';
+            togglePhotoRequirement();
+        }
+
+        // Switch Tab Photo Mode (Upload vs Camera)
+        function switchPhotoTab(mode) {
+            const tabUpload = document.getElementById('tabUpload');
+            const tabCamera = document.getElementById('tabCamera');
+            const areaUpload = document.getElementById('areaUpload');
+            const areaCamera = document.getElementById('areaCamera');
+
+            if (mode === 'upload') {
+                tabUpload.className = "py-1.5 px-3 border-b-2 border-physics-500 text-physics-600 text-xs font-medium";
+                tabCamera.className = "py-1.5 px-3 border-b-2 border-transparent text-slate-500 hover:text-slate-700 text-xs font-medium";
+                areaUpload.classList.remove('hidden');
+                areaCamera.classList.add('hidden');
+                stopWebcam();
+            } else {
+                tabCamera.className = "py-1.5 px-3 border-b-2 border-physics-500 text-physics-600 text-xs font-medium";
+                tabUpload.className = "py-1.5 px-3 border-b-2 border-transparent text-slate-500 hover:text-slate-700 text-xs font-medium";
+                areaCamera.classList.remove('hidden');
+                areaUpload.classList.add('hidden');
+            }
+        }
+
+        // Preview File Uploaded
+        function previewUploadedImage(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                if (file.size > 2 * 1024 * 1024) {
+                    showToast('Ukuran foto maksimal 2MB!', 'error');
+                    input.value = '';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentPhotoBase64 = e.target.result;
+                    document.getElementById('fotoPreview').src = currentPhotoBase64;
+                    document.getElementById('previewContainer').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Webcam Functions
+        async function startWebcam() {
+            const video = document.getElementById('webcamVideo');
+            const placeholder = document.getElementById('webcamPlaceholder');
+            const captureBtn = document.getElementById('captureCamBtn');
+
+            try {
+                webcamStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+                video.srcObject = webcamStream;
+                video.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                captureBtn.disabled = false;
+            } catch (err) {
+                showToast('Tidak dapat mengakses kamera Web!', 'error');
+                console.error(err);
+            }
+        }
+
+        function captureWebcam() {
+            const video = document.getElementById('webcamVideo');
+            const canvas = document.getElementById('webcamCanvas');
+            const context = canvas.getContext('2d');
+
+            if (!webcamStream) return;
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            currentPhotoBase64 = canvas.toDataURL('image/jpeg');
+            document.getElementById('fotoPreview').src = currentPhotoBase64;
+            document.getElementById('previewContainer').classList.remove('hidden');
+
+            showToast('Foto seragam berhasil diambil!', 'success');
+            stopWebcam();
+        }
+
+        function stopWebcam() {
+            if (webcamStream) {
+                webcamStream.getTracks().forEach(track => track.stop());
+                webcamStream = null;
+            }
+            const video = document.getElementById('webcamVideo');
+            const placeholder = document.getElementById('webcamPlaceholder');
+            const captureBtn = document.getElementById('captureCamBtn');
+
+            if (video) video.classList.add('hidden');
+            if (placeholder) placeholder.classList.remove('hidden');
+            if (captureBtn) captureBtn.disabled = true;
+        }
+
+        // Remove Selected Photo
+        function removePhoto() {
+            currentPhotoBase64 = '';
+            document.getElementById('fotoInput').value = '';
+            document.getElementById('fotoPreview').src = '';
+            document.getElementById('previewContainer').classList.add('hidden');
+        }
+
+        // Toggle Mandatory Photo Star based on Status
+        function togglePhotoRequirement() {
+            const status = document.querySelector('input[name="status"]:checked').value;
+            const photoStar = document.getElementById('photoRequiredStar');
+            if (status === 'Hadir') {
+                photoStar.classList.remove('hidden');
+            } else {
+                photoStar.classList.add('hidden');
+            }
+        }
+
+        // Reset Filter Table
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('filterKelas').value = 'Semua';
+            document.getElementById('filterStatus').value = 'Semua';
+            renderTable();
+        }
+
+        // Export Table Data to CSV
+        function exportToCSV() {
+            if (presensiList.length === 0) {
+                showToast('Tidak ada data untuk diekspor!', 'error');
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "No,Tanggal,Nama Siswa,Kelas,Status Kehadiran\n";
+
+            presensiList.forEach((item, index) => {
+                const row = `"${index + 1}","${item.tanggal}","${item.nama}","${item.kelas}","${item.status}"`;
+                csvContent += row + "\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Rekap_Presensi_Fisika_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showToast('Data presensi berhasil diekspor ke CSV!', 'success');
+        }
+
+        // Modal Lightbox Foto
+        function openPhotoModal(imgSrc, studentName) {
+            document.getElementById('modalImage').src = imgSrc;
+            document.getElementById('modalStudentName').innerText = `Bukti Seragam: ${studentName}`;
+            document.getElementById('photoModal').classList.remove('hidden');
+        }
+
+        function closePhotoModal() {
+            document.getElementById('photoModal').classList.add('hidden');
+        }
+
+        // Toast Notification System
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMessage.innerText = message;
+
+            if (type === 'success') {
+                toastIcon.className = "fa-solid fa-circle-check text-emerald-400";
+            } else if (type === 'error') {
+                toastIcon.className = "fa-solid fa-circle-xmark text-rose-400";
+            } else {
+                toastIcon.className = "fa-solid fa-circle-info text-sky-400";
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Utility: Format Date
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const parts = dateString.split('-');
+            if (parts.length === 3) {
+                return `${parts[2]}/${parts[1]}/${parts[0]}`;
+            }
+            return dateString;
+        }
+
+        // Utility: Escape HTML for security
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag] || tag)
+            );
+        }
+    </script>
+</body>
+</html>
